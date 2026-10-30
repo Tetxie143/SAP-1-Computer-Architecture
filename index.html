@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101619">
+  <title>SAP-1 | Computer Architecture Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="script.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="SAP-1 Computer Architecture Lab home"><span class="brand-mark">S1</span><span><strong>SAP-1</strong><small>COMPUTER ARCHITECTURE LAB</small></span></a>
+    <div class="topbar-meta"><span class="clock-label">SIMULATOR <b>v1.0</b></span><span class="status-pill" id="status-pill"><i></i><span id="status-text">Ready</span></span></div>
+  </header>
+  <main id="top" class="layout">
+    <section class="intro" aria-labelledby="page-title"><div><p class="eyebrow">VIRTUAL MACHINE / 8-BIT</p><h1 id="page-title">Inside a simple computer.</h1></div><p class="intro-note">Load a program, trace every transfer, and watch the machine state change one instruction at a time.</p></section>
+    <section class="workbench" aria-label="Computer workbench">
+      <div class="architecture panel">
+        <div class="section-heading"><div><p class="eyebrow">01 / DATA PATH</p><h2>Architecture</h2></div><span class="phase" id="phase-label">AWAITING INSTRUCTION</span></div>
+        <div class="cycle-stages" id="cycle-stages" aria-label="Instruction cycle phases"><span data-phase="fetch">01 FETCH</span><span data-phase="decode">02 DECODE</span><span data-phase="execute">03 EXECUTE</span></div>
+        <div class="architecture-canvas">
+          <div class="component-row top-components"><div class="component" data-component="PC"><span class="component-tag">SEQUENCER</span><strong>Program Counter</strong><small>PC / 4-bit</small></div><span class="connector">›</span><div class="component" data-component="MAR"><span class="component-tag">ADDRESS</span><strong>Memory Address</strong><small>MAR / 4-bit</small></div><span class="connector">›</span><div class="component" data-component="RAM"><span class="component-tag">STORAGE</span><strong>RAM</strong><small>16 × 8-bit</small></div></div>
+          <div class="bus-track" id="bus-track" aria-label="W-Bus activity"><div class="bus-rail"><span class="bus-pulse"></span></div><div class="bus-caption"><span>W-BUS <b>8 BIT</b></span><strong id="bus-value">--</strong><span id="bus-message">No transfer in progress</span></div></div>
+          <div class="component-row bottom-components"><div class="component" data-component="IR"><span class="component-tag">INSTRUCTION</span><strong>Instruction Register</strong><small>IR / OPCODE + OPERAND</small></div><div class="component" data-component="A"><span class="component-tag">ACCUMULATOR</span><strong>Register A</strong><small>8-bit</small></div><div class="component" data-component="B"><span class="component-tag">OPERAND</span><strong>B-Register</strong><small>8-bit</small></div><div class="component" data-component="ALU"><span class="component-tag">ARITHMETIC</span><strong>Adder / Subtractor</strong><small>8-bit ALU</small></div><div class="component" data-component="OUT"><span class="component-tag">OUTPUT</span><strong>Output Register</strong><small>8-bit</small></div></div>
+        </div>
+        <div class="transfer-strip"><span class="transfer-arrow" id="transfer-arrow">W-BUS</span><span id="transfer-text">Waiting for a fetch cycle</span><button class="text-button" id="micro-toggle" type="button" aria-expanded="false">Show micro-operations <span>+</span></button></div>
+        <ol class="micro-list" id="micro-list" hidden></ol>
+      </div>
+      <aside class="side-column">
+        <section class="register-section panel"><div class="section-heading compact"><div><p class="eyebrow">02 / MACHINE STATE</p><h2>Registers</h2></div><span class="unit">HEX · BIN · DEC</span></div>
+          <div class="register-grid">
+            <article class="register" data-register="pc"><div class="register-title"><span>Program Counter</span><b>PC</b></div><strong class="register-hex" id="reg-pc-hex">0H</strong><code id="reg-pc-bin">0000</code><small>DEC <span id="reg-pc-dec">0</span></small></article>
+            <article class="register" data-register="mar"><div class="register-title"><span>Memory Address</span><b>MAR</b></div><strong class="register-hex" id="reg-mar-hex">0H</strong><code id="reg-mar-bin">0000</code><small>DEC <span id="reg-mar-dec">0</span></small></article>
+            <article class="register" data-register="ir"><div class="register-title"><span>Instruction</span><b>IR</b></div><strong class="register-hex" id="reg-ir-hex">00H</strong><code id="reg-ir-bin">00000000</code><small>DEC <span id="reg-ir-dec">0</span></small></article>
+            <article class="register" data-register="a"><div class="register-title"><span>Accumulator</span><b>A</b></div><strong class="register-hex" id="reg-a-hex">00H</strong><code id="reg-a-bin">00000000</code><small>DEC <span id="reg-a-dec">0</span></small></article>
+            <article class="register" data-register="b"><div class="register-title"><span>B-Register</span><b>B</b></div><strong class="register-hex" id="reg-b-hex">00H</strong><code id="reg-b-bin">00000000</code><small>DEC <span id="reg-b-dec">0</span></small></article>
+            <article class="register output-register" data-register="out"><div class="register-title"><span>Output</span><b>OUT</b></div><strong class="register-hex" id="reg-out-hex">00H</strong><code id="reg-out-bin">00000000</code><small>DEC <span id="reg-out-dec">0</span></small></article>
+          </div>
+        </section>
+        <section class="led-section panel"><div class="section-heading compact"><div><p class="eyebrow">03 / OUTPUT DEVICE</p><h2>Output LEDs</h2></div><span class="unit">MSB ← → LSB</span></div><div class="led-row" id="led-row" aria-label="Eight output bits"></div><div class="output-readout"><span>OUTPUT VALUE</span><strong id="output-value">00H <small>/ 0</small></strong></div></section>
+      </aside>
+    </section>
+    <section class="controls panel" aria-label="Execution controls">
+      <div class="control-buttons"><button class="button primary" id="step-button" type="button"><span class="button-icon">▶|</span>Step</button><button class="button run-button" id="run-button" type="button"><span class="button-icon">▶</span>Run</button><button class="button" id="pause-button" type="button" disabled><span class="button-icon">Ⅱ</span>Pause</button><button class="button" id="reset-button" type="button"><span class="button-icon">↺</span>Reset</button></div>
+      <label class="speed-control" for="speed-slider"><span>RUN SPEED</span><input id="speed-slider" type="range" min="150" max="1500" step="50" value="650"><b id="speed-value">650 ms</b></label>
+      <div class="control-actions"><button class="button small-button" id="export-button" type="button">↓ Export memory</button><button class="button small-button" id="import-button" type="button">↑ Import memory</button><input id="import-file" type="file" accept=".json,.txt,application/json,text/plain" hidden></div>
+    </section>
+    <p class="notice" id="notice" role="status" aria-live="polite">Ready. Load a sample or enter a program to begin.</p>
+    <section class="lower-grid">
+      <section class="ram-section panel"><div class="section-heading"><div><p class="eyebrow">04 / 16 × 8-BIT</p><h2>RAM address map</h2></div><div class="ram-heading-actions"><div class="legend"><span><i class="legend-pc"></i>PC</span><span><i class="legend-mar"></i>MAR</span><span><i class="legend-exec"></i>Executing</span></div><button class="button small-button" id="clear-ram-button" type="button">Clear RAM</button></div></div><div class="ram-grid" id="ram-grid"></div><p class="field-hint">Edit any byte in place. Enter hexadecimal, with or without the H suffix.</p></section>
+      <section class="program-section panel"><div class="section-heading"><div><p class="eyebrow">05 / PROGRAM INPUT</p><h2>Program editor</h2></div><span class="unit">ASSEMBLER</span></div>
+        <div class="sample-inputs"><label>DATA 9H <span>VALUE A</span><input id="sample-a" value="25" inputmode="text" maxlength="3" aria-label="Data value at address 9H"></label><label>DATA AH <span>VALUE B</span><input id="sample-b" value="05" inputmode="text" maxlength="3" aria-label="Data value at address AH"></label><label>DATA BH <span>VALUE C</span><input id="sample-c" value="23" inputmode="text" maxlength="3" aria-label="Data value at address BH"></label><button class="button sample-button" id="sample-button" type="button">Load sample</button></div>
+        <label class="editor-label" for="instruction-editor">INSTRUCTIONS <span>one instruction per line · # comments allowed</span></label><textarea id="instruction-editor" spellcheck="false" aria-label="Assembly instructions">LDA 9H
+ADD AH
+SUB BH
+OUT
+HLT</textarea>
+        <div class="machine-code" id="machine-code"><span>MACHINE CODE</span><code>00H — 00000000</code></div><button class="button primary load-button" id="load-button" type="button">Load program <span>→</span></button>
+        <details class="raw-editor"><summary>Raw memory editor</summary><label for="raw-memory">16 bytes in address order, separated by spaces, commas, or new lines</label><textarea id="raw-memory" rows="3" spellcheck="false" aria-label="Raw memory values"></textarea><button class="button small-button" id="apply-raw-button" type="button">Apply raw memory</button></details>
+      </section>
+      <section class="signals-section panel"><div class="section-heading"><div><p class="eyebrow">06 / CONTROLLER</p><h2>Control signals</h2></div><span class="unit">ACTIVE HIGH</span></div><div class="signal-list" id="signal-list"></div><p class="field-hint">Signals are asserted for the currently displayed micro-operation.</p></section>
+      <section class="log-section panel"><div class="section-heading"><div><p class="eyebrow">07 / TRACE</p><h2>Execution log</h2></div><button class="text-button" id="clear-log-button" type="button">Clear log</button></div><div class="instruction-summary"><span>CURRENT INSTRUCTION</span><strong id="current-instruction">—</strong><small id="current-operand">FETCH / DECODE / EXECUTE</small></div><ol class="log-list" id="log-list" aria-live="polite"><li class="empty-log">The instruction trace will appear here.</li></ol></section>
+    </section>
+    <footer><span>SAP-1 COMPUTER ARCHITECTURE LAB</span><span>16 ADDRESSES · 8-BIT DATA PATH · MODULO-16 PC</span></footer>
+  </main>
+</body>
+</html>
